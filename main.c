@@ -5,6 +5,7 @@ int atoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
 
+// This only works for the first quadrant
 int main(int argc, char *argv[]) {
 	if (argc != 3) {
 		printf("Put in 2 arguments\n");
@@ -49,18 +50,35 @@ int abs(int x) {
 	return x;
 }
 
+// draw a graph with -ve slope
 void graph_neg(int m, int b) {
 	m = abs(m);
 	int y = b;
 	int x = 0; // how many spaces to the right we are
-	for (int i = 0; i < 10; i++) {
+
+	printf("^"); // Arrow head for y-axis
+	for (; y > 0; y -= m) {
+
+		// Draw how far we are from the x axis. 0 at the start
 		for (int j = 0; j < x; j++)
 			printf(" ");
 		x++;
-		printf("-");
+
+		printf(".");
+
+		/*
+		Move down by (m) units, and print the y axis
+		*/
 		for (int j = 0; j < m; j++)
-			printf("\n");
+			printf("\n|");
 	}
+	// Print the x axis
+
+	x *= 2; // Make the x axis twice as long as the farthest x point
+	while (x-- > 0)
+		printf("-");
+	printf(">\n");
 }
 
-void graph_pos(int m, int b) {}
+void graph_pos(int m, int b) {
+}
