@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 		graph = graph_pos;
 
 	(*graph)(m, b);
-		
+
 	return 0;
 }
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 int atoi(char *s) {
 	while (*s == ' ' || *s == '+')
 		s++;
-	
+
 	int neg = 1;
 	if (*s == '-') {
 		neg = -1;
@@ -61,21 +61,26 @@ void graph_neg(int m, int b) {
 	// start at y intercept, go till y = 0
 	for (; y > 0; y -= m) {
 
-		// Draw how far we are from the y axis. We start at the intercept
+
+		/*
+		How many spaces we are from y-axis. (our x coordinate)
+
+		note that x is number of spaces from left of terminal, not from y axis.
+
+		Since drawing the y-axis takes a character's space, we go x-1 units
+		from the left of the terminal.
+		*/
 		for (int j = 0; j < x - 1; j++)
 			printf(" ");
 		x++;
+		printf("."); // point
 
-		printf(".");
-
-		/*
-		Move down by (m) units, and print the y axis
-		*/
+		// y decreases by slope units each time x increases by 1.
 		for (int j = 0; j < m; j++)
 			printf("\n|");
 	}
-	// Print the x axis
 
+	// Print the x axis
 	x *= 2; // Make the x axis twice as long as the farthest x point
 	while (x-- > 0)
 		printf("-");
