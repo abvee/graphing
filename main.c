@@ -54,13 +54,15 @@ int abs(int x) {
 void graph_neg(int m, int b) {
 	m = abs(m);
 	int y = b;
-	int x = 0; // how many spaces to the right we are
+	int x = 0; // how many spaces to the right we are of y axis
 
-	printf("^"); // Arrow head for y-axis
+	printf("^\n|\n"); // y axis arrow head
+
+	// start at y intercept, go till y = 0
 	for (; y > 0; y -= m) {
 
-		// Draw how far we are from the x axis. 0 at the start
-		for (int j = 0; j < x; j++)
+		// Draw how far we are from the y axis. We start at the intercept
+		for (int j = 0; j < x - 1; j++)
 			printf(" ");
 		x++;
 
