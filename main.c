@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 	else
 		graph = graph_pos;
 
-	(*graph)(m, b);
+	graph(m, b);
 
 	return 0;
 }
@@ -44,22 +44,15 @@ int atoi(char *s) {
 	return neg * x;
 }
 
-int abs(int x) {
-	if (x < 0)
-		return -x;
-	return x;
-}
-
 // draw a graph with -ve slope
 void graph_neg(int m, int b) {
-	m = abs(m);
 	int y = b;
 	int x = 0; // how many spaces to the right we are of y axis
 
 	printf("^\n|\n"); // y axis arrow head
 
-	// start at y intercept, go till y = 0
-	for (; y > 0; y -= m) {
+	// start at y intercept, go till y = 0 (recall m is -ve)
+	for (; y > 0; y += m) {
 
 
 		/*
@@ -73,10 +66,10 @@ void graph_neg(int m, int b) {
 		for (int j = 0; j < x - 1; j++)
 			printf(" ");
 		x++;
-		printf("."); // point
+		printf(". "); // point
 
-		// y decreases by slope units each time x increases by 1.
-		for (int j = 0; j < m; j++)
+		// y decreases by slope amount for x += 1. so print (m) \n
+		for (int j = m; j < 0; j++)
 			printf("\n|");
 	}
 
