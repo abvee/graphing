@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-enum {MAX = 100};
+typedef enum {false, true} bool;
+
 int atoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
@@ -48,36 +49,37 @@ int atoi(char *s) {
 void graph_neg(int m, int b) {
 	int y = b;
 	int x = 0; // how many spaces to the right we are of y axis
+	int max = (b > 0)?-b/2:2 * b; // Till what y value should we go ?
+	bool xaxis = false; // Have we drawn an xaxis ?
 
 	printf("^\n|\n"); // y axis arrow head
 
 	// start at y intercept, go till y = 0 (recall m is -ve)
-	for (; y > 0; y += m) {
 
-
-		/*
-		How many spaces we are from y-axis. (our x coordinate)
-
-		note that x is number of spaces from left of terminal, not from y axis.
-
-		Since drawing the y-axis takes a character's space, we go x-1 units
-		from the left of the terminal.
-		*/
-		for (int j = 0; j < x - 1; j++)
+	while (y >= max) {
+		for (int j = x - 1; j > 0; j--)
 			printf(" ");
+
+		printf(". (%d, %d)", x, y);
 		x++;
-		printf(". "); // point
+		y+=m;
+
+		// Broken x axis code
+		if (xaxis == false && y <= 0) {
+
+			for (int i = y - m; i > 0; i--)
+				printf("\n|");
+
+			for (int i = 0; i < 12; i++)
+				printf("-");
+
+			xaxis = true;
+		}
 
 		// y decreases by slope amount for x += 1. so print (m) \n
 		for (int j = m; j < 0; j++)
 			printf("\n|");
 	}
-
-	// Print the x axis
-	x *= 2; // Make the x axis twice as long as the farthest x point
-	while (x-- > 0)
-		printf("-");
-	printf(">\n");
 }
 
 void graph_pos(int m, int b) {
