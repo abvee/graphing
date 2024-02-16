@@ -90,15 +90,12 @@ void graph_neg(int m, int b) {
 }
 
 void graph_pos(int m, int b) {
-	int x = 2 * b; // Initially, x is far to the right. We have taken this as 2 * b
+	int x = 2 * (b > 0)?b:-b; // Initially, x is far to the right. We have taken this as 2 * b
 	int y = m * x + b; // initialy y value;
-	int yr;
 
 	printf("^"); // starting y-axis
 
 	while (x > 0) {
-		for (int i = m; i > 0; i--)
-			printf("\n|");
 
 		for (int j = x - 1; j > 0; j--)
 			printf(" ");
@@ -106,6 +103,9 @@ void graph_pos(int m, int b) {
 		printf(". (%d, %d)", x, y);
 		y -= m;
 		x--;
+
+		for (int i = m; i > 0; i--)
+			printf("\n|");
 	}
-	printf("\n. (%d, %d)\n", x, y);
+	printf("\b. (%d %d)\n", x, y);
 }
