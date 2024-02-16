@@ -95,6 +95,8 @@ void graph_pos(int m, int b) {
 
 	printf("^"); // starting y-axis
 
+	// We plot only the first and third quadrants
+	// Todo: xaxis
 	while (x > 0) {
 
 		for (int j = x - 1; j > 0; j--)
