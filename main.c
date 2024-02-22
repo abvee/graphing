@@ -5,6 +5,7 @@ typedef enum {false, true} bool;
 int atoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
+void graph_0(int m, int b);
 
 // This only works for the first quadrant
 int main(int argc, char *argv[]) {
@@ -20,6 +21,8 @@ int main(int argc, char *argv[]) {
 
 	if (m < 0)
 		graph = graph_neg;
+	else if (m == 0)
+		graph = graph_0;
 	else
 		graph = graph_pos;
 
@@ -110,4 +113,21 @@ void graph_pos(int m, int b) {
 			printf("\n|");
 	}
 	printf("\b. (%d %d)\n", x, y);
+}
+
+void graph_0(int m, int b) {
+	printf("^\n|\n"); // print the starting yaxis
+	for (int i = 0; i < 12; i++)
+		printf("-");
+	printf(">\n");
+
+	// if statement goes here
+
+	// What to do with this ? abs(b)
+	while (b-- > 0)
+		printf("|\n");
+
+	for (int i = 0; i < 12; i++)
+		printf("-");
+	printf(">\n");
 }
