@@ -5,7 +5,7 @@ typedef enum {false, true} bool;
 int atoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
-void graph_0(int m, int b);
+void graph_0(int b);
 
 // This only works for the first quadrant
 int main(int argc, char *argv[]) {
@@ -17,16 +17,12 @@ int main(int argc, char *argv[]) {
 	int m = atoi(argv[1]); // slope
 	int b = atoi(argv[2]); // offset
 
-	void (*graph)(int m, int b);
-
 	if (m < 0)
-		graph = graph_neg;
+		graph_neg(m, b);
 	else if (m == 0)
-		graph = graph_0;
+		graph_0(b);
 	else
-		graph = graph_pos;
-
-	graph(m, b);
+		graph_pos(m, b);
 
 	return 0;
 }
@@ -115,19 +111,30 @@ void graph_pos(int m, int b) {
 	printf("\b. (%d %d)\n", x, y);
 }
 
-void graph_0(int m, int b) {
+void graph_0(int b) {
+	int x = (b > 0)?b:-b; // abs(b)
+
 	printf("^\n|\n"); // print the starting yaxis
 	for (int i = 0; i < 12; i++)
 		printf("-");
-	printf(">\n");
+	printf("> ");
 
 	// if statement goes here
+	if (b > 0)
+		printf("y = %d\n", b);
+	else
+		printf("y = 0\n");
 
 	// What to do with this ? abs(b)
-	while (b-- > 0)
+	while (x-- > 0)
 		printf("|\n");
 
 	for (int i = 0; i < 12; i++)
 		printf("-");
-	printf(">\n");
+	printf("> ");
+
+	if (b > 0)
+		printf("y = 0\n");
+	else
+		printf("y = %d\n", b);
 }
