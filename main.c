@@ -67,7 +67,7 @@ void graph_neg(int m, int b) {
 		x++;
 		y += m;
 
-		// Broken x axis code
+		// x axis code
 		if (xaxis == false && y <= 0) {
 			int o = x - 1;
 
@@ -91,24 +91,38 @@ void graph_neg(int m, int b) {
 void graph_pos(int m, int b) {
 	int x = 2 * (b > 0)?b:-b; // Initially, x is far to the right. We have taken this as 2 * b
 	int y = m * x + b; // initialy y value;
+	int yr = y;
+	bool xaxis = false;
 
 	printf("^"); // starting y-axis
 
 	// We plot only the first and third quadrants
 	// Todo: xaxis
 	while (x > 0) {
-
-		for (int j = x - 1; j > 0; j--)
-			printf(" ");
+		if (y != 0)
+			for (int j = x - 1; j > 0; j--)
+				printf(" ");
 
 		printf(". (%d, %d)", x, y);
 		y -= m;
 		x--;
 
-		for (int i = m; i > 0; i--)
+		// x axis code
+		if (xaxis == false && y <= 0) {
+			int o = x - 1;
+			for (; yr > 0; yr--)
+				printf("\n|");
+
+			while (o-- > 0)
+				putchar('-');
+
+			xaxis = true;
+		}
+
+		for (; yr > y; yr--)
 			printf("\n|");
 	}
-	printf("\b. (%d %d)\n", x, y);
+	printf("\b. (%d, %d)\n", x, y);
 }
 
 void graph_0(int b) {
