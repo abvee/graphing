@@ -44,6 +44,11 @@ int atoi(char *s) {
 	return neg * x;
 }
 
+void plot(int x, int y, char c) {
+	for (int i = x - 1; i > 0; i--)
+		putchar(c);
+	printf(". (%d, %d)", x, y);
+}
 // draw a graph with -ve slope
 void graph_neg(int m, int b) {
 	int y = b; // the y coordinate of the point
@@ -60,12 +65,7 @@ void graph_neg(int m, int b) {
 	while (y >= max) {
 		for (; yr > y; yr--)
 			printf("\n|");
-
-		for (int i = x - 1; i > 0; i--)
-			putchar(' ');
-
-		printf(". (%d, %d)", x, y);
-		x++;
+		plot(x++, y, ' ');
 		y += m;
 
 		if (xaxis == false && y <= 0) {
@@ -77,11 +77,11 @@ void graph_neg(int m, int b) {
 				putchar('-');
 
 			if (y == 0) {
-				printf(". (%d, %d)", x, y);
+				plot(x++, y, 0);
+				y+=m;
 				printf("--->");
-				x++;
-				y += m;
 			}
+
 			xaxis = true;
 		}
 	}
