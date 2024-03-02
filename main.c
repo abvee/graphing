@@ -82,8 +82,6 @@ void graph_neg(int m, int b) {
 				y+=m;
 				printf("--->");
 			}
-			else
-				putchar('>')
 
 			xaxis = true;
 		}
