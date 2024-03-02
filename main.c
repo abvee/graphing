@@ -51,25 +51,26 @@ void plot(int x, int y, char c) {
 }
 // draw a graph with -ve slope
 void graph_neg(int m, int b) {
-	int y = b; // the y coordinate of the point
-	int yr = y; // the actual y coordinate
-	int x = 0; // how many spaces to the right we are of y axis
-	int max = (b > 0)?-b/2:2 * b; // Till what y value should we go ?
-	bool xaxis = false; // Have we drawn an xaxis ?
+	int y = b; // y coordinate of the point
+	int yr = y; // actual y coordinate
+	int x = 0; // x coordinate of point
+	int max = (b > 0)?-b/2:2 * b; // max y value
+
+	bool xaxis = false; // Have we drawn x axis
 
 	printf("^\n|\n"); // y axis arrow head
 
-	// start at y intercept, go till y = 0 (recall m is -ve)
-	// TODO: possible optimisation
-	char c = ' ';
+	// draw graph
 	while (y >= max) {
+		// slope
 		for (; yr > y; yr--)
 			printf("\n|");
 		plot(x++, y, ' ');
 		y += m;
 
+		// xaxis code
 		if (xaxis == false && y <= 0) {
-			for (;yr > 0; yr--)
+			for (;yr > 0; yr--) // get to x axis
 				printf("\n|");
 
 			int o = x - 1;
@@ -81,16 +82,12 @@ void graph_neg(int m, int b) {
 				y+=m;
 				printf("--->");
 			}
+			else
+				putchar('>')
 
 			xaxis = true;
 		}
 	}
-	/*
-	for (int j = x - 1; j > 0; j--)
-		putchar(' ');
-
-	printf(". (%d, %d)\n", x, y);
-	*/
 	putchar('\n');
 }
 
