@@ -49,81 +49,88 @@ void plot(int x, int y, char c) {
 		putchar(c);
 	printf(". (%d, %d)", x, y);
 }
+
 // draw a graph with -ve slope
 void graph_neg(int m, int b) {
-	int y = b; // y coordinate of the point
-	int yr = y; // actual y coordinate
-	int x = 0; // x coordinate of point
-	int max = (b > 0)?-b/2:2 * b; // max y value
+	int y = b; // y level of point
+	int x = 0; // x level
 
-	bool xaxis = false; // Have we drawn x axis
+	int yr = y; // real y level
+	int max = 2 * b; // Where do we plot till
+	printf("^\n|\n");
 
-	printf("^\n|\n"); // y axis arrow head
+	// Plot the +ve part
+	if (b > 0) {
+		for (; y > 0; y += m) {
+			for (; yr > y; yr--)
+				printf("\n|");
+			plot(x++, y, ' ');
+		}
+		max = -b;
+	}
 
-	// draw graph
-	while (y >= max) {
-		// slope
+	// Plot the X axis
+	for (;yr > 0; yr--)
+		printf("\n|");
+	if (y == 0) {
+		plot(x++, y, '-');
+		y+=m;
+		printf("--->");
+	}
+	else if (yr > 0) { // checks if offset itself is not -ve
+		int o = 2 * x;
+		while (o-- > 0)
+			putchar('-');
+		putchar('>');
+	}
+
+	// plot bellow x axis
+	for (; y > max; y+=m) {
 		for (; yr > y; yr--)
 			printf("\n|");
 		plot(x++, y, ' ');
-		y += m;
-
-		// xaxis code
-		if (xaxis == false && y <= 0) {
-			for (;yr > 0; yr--) // get to x axis
-				printf("\n|");
-
-			int o = x - 1;
-			while (o-- > 0)
-				putchar('-');
-
-			if (y == 0) {
-				plot(x++, y, 0);
-				y+=m;
-				printf("--->");
-			}
-
-			xaxis = true;
-		}
 	}
 	putchar('\n');
 }
 
 void graph_pos(int m, int b) {
-	int x = 2 * (b > 0)?b:-b; // Initially, x is far to the right. We have taken this as 2 * b
-	int y = m * x + b; // initialy y value;
-	int yr = y;
-	bool xaxis = false;
+	int x = (b > 0)?b:(int) (1.5 * -b);
+	int y = m * x + b;
 
-	printf("^"); // starting y-axis
+	int yr = y; // real y level
+	printf("^\n|");
 
-	// We plot only the first and third quadrants
-	// Todo: xaxis
-	while (x > 0) {
-		if (y != 0)
-			for (int j = x - 1; j > 0; j--)
-				printf(" ");
-
-		printf(". (%d, %d)", x, y);
-		y -= m;
-		x--;
-
-		// x axis code
-		if (xaxis == false && y <= 0) {
-			int o = x - 1;
-			for (; yr > 0; yr--)
-				printf("\n|");
-
-			while (o-- > 0)
-				putchar('-');
-
-			xaxis = true;
-		}
-
+	// plot above the x axis
+	for (; y > 0; y-=m) {
 		for (; yr > y; yr--)
 			printf("\n|");
+		plot(x--, y, ' ');
 	}
-	printf("\b. (%d, %d)\n", x, y);
+
+	// plot x axis
+	for (; yr > 0; yr--)
+		printf("\n|");
+
+	if (y == 0) {
+		plot(x--, y, '-');
+		y-=m;
+		printf("--->");
+	}
+	else {
+		int o = 2 * x;
+		while (o-- > 0)
+			putchar('-');
+		putchar('>');
+	}
+
+	// plot bellow the x axis
+	for (; x > 0; x--) {
+		for (; yr > y; yr--)
+			printf("\n|");
+		plot(x, y, ' ');
+		y -= m;
+	}
+	putchar('\n');
 }
 
 void graph_0(int b) {
