@@ -7,8 +7,14 @@ void graph_neg(int m, int b);
 void graph_pos(int m, int b);
 void graph_0(int b);
 
+#define printd(x) printf("\033[1;31mDEBUG\033[0m: " #x " %d\n", (x))
+
+
 // This only works for the first quadrant
 int main(int argc, char *argv[]) {
+	// printf("\033[1;31mDEBUG:\033[0m %d\n", (12));
+	// return 0;
+
 	if (argc != 3) {
 		printf("Put in 2 arguments\n");
 		return -1;
@@ -16,6 +22,10 @@ int main(int argc, char *argv[]) {
 
 	int m = atoi(argv[1]); // slope
 	int b = atoi(argv[2]); // offset
+	if (m > 100 || m < -100 || b > 100 || b < -100) {
+		printf("Put in a smaller slope or offset. keep it to 100, what you're gonna scroll forever ??\n");
+		return 1;
+	}
 
 	if (m < 0)
 		graph_neg(m, b);
@@ -94,10 +104,37 @@ void graph_neg(int m, int b) {
 }
 
 void graph_pos(int m, int b) {
-	int x = (b > 0)?b:(int) (1.5 * -b);
-	int y = m * x + b;
+	int x;
+	int x_0; // x of point that is just above x-axis 
+	int end_x;
+	// printd(x_0);
 
+	x_0 = (-b / m);
+	/*
+	m * (x_0) is always <= b
+	Thus, x_0 is the (x) coord just on or bellow the x axis if b < 0
+	x_0 is the (x) coord just on or above the x axis if b > 0
+	*/
+	if (b > 0) {
+		x = b; 
+		if (b % m == 0) // x_0 on the xaxis, move it one up
+			x_0 += 1;
+	}
+	else {
+		x = -b;
+		x_0 += 1;
+	}
+	end_x = -x; // we plot as much above as we do bellow
+	char spaces[end_x];
+	for (int i = end_x; i > 0; i++)
+		spaces[end_x] = ' ';
+	printf("DEBUG: %s\n", spaces);
+
+	printd(x_0);
+	// printd(end_x);
+	int y = m * x + b;
 	int yr = y; // real y level
+
 	printf("^\n|");
 
 	// plot above the x axis
@@ -124,6 +161,10 @@ void graph_pos(int m, int b) {
 	}
 
 	// plot bellow the x axis
+	/*
+	The x > 0 condition is just wrong.
+	Take m = 2, b = 8. x becomes < 0 before the first loop is even over
+	*/
 	for (; x > 0; x--) {
 		for (; yr > y; yr--)
 			printf("\n|");
