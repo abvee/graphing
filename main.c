@@ -125,13 +125,9 @@ void graph_pos(int m, int b) {
 		x_0 += 1;
 	}
 	end_x = -x; // we plot as much above as we do bellow
-	char spaces[end_x];
-	for (int i = end_x; i > 0; i++)
-		spaces[end_x] = ' ';
-	printf("DEBUG: %s\n", spaces);
-
 	printd(x_0);
-	// printd(end_x);
+	printd(end_x);
+
 	int y = m * x + b;
 	int yr = y; // real y level
 
