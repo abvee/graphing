@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef enum {false, true} bool;
+enum {MAX = 101}; // MAx length of arbritary arrays
 
-int atoi(char *string_to_convert); // String to integer
+int myatoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
 void graph_0(int b);
@@ -12,16 +14,14 @@ void graph_0(int b);
 
 // This only works for the first quadrant
 int main(int argc, char *argv[]) {
-	// printf("\033[1;31mDEBUG:\033[0m %d\n", (12));
-	// return 0;
 
 	if (argc != 3) {
 		printf("Put in 2 arguments\n");
 		return -1;
 	}
 
-	int m = atoi(argv[1]); // slope
-	int b = atoi(argv[2]); // offset
+	int m = myatoi(argv[1]); // slope
+	int b = myatoi(argv[2]); // offset
 	if (m > 100 || m < -100 || b > 100 || b < -100) {
 		printf("Put in a smaller slope or offset. keep it to 100, what you're gonna scroll forever ??\n");
 		return 1;
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 }
 
 // change text to number
-int atoi(char *s) {
+int myatoi(char *s) {
 	while (*s == ' ' || *s == '+')
 		s++;
 
@@ -53,6 +53,8 @@ int atoi(char *s) {
 		x = x * 10 + *s - '0';
 	return neg * x;
 }
+
+static char spaces[MAX] = {'\0'};
 
 void plot(int x, int y, char c) {
 	for (int i = x - 1; i > 0; i--)
@@ -125,13 +127,12 @@ void graph_pos(int m, int b) {
 		x_0 += 1;
 	}
 	end_x = -x; // we plot as much above as we do bellow
-	printd(x_0);
-	printd(end_x);
-
 	int y = m * x + b;
 	int yr = y; // real y level
 
-	printf("^\n|");
+	for (int i = 0; i < -end_x; i++)
+		spaces[i] = ' ';
+	// printf("%s|\n", spaces);
 
 	// plot above the x axis
 	for (; y > 0; y-=m) {
