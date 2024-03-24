@@ -55,11 +55,19 @@ int myatoi(char *s) {
 }
 
 static char spaces[MAX] = {'\0'};
+int end_x;
 
 void plot(int x, int y, char c) {
+	int o = x;
+	if (x > 0)
+		printf("%s|", spaces);
+	else {
+	 // if we go to the 2nd or third quadrant, x is now how far from the last x value.
+		x = -end_x+x + 1;
+	}
 	for (int i = x - 1; i > 0; i--)
 		putchar(c);
-	printf(". (%d, %d)", x, y);
+	printf(". (%d, %d)\n", o, y);
 }
 
 // draw a graph with -ve slope
@@ -76,8 +84,7 @@ void graph_neg(int m, int b) {
 		for (; y > 0; y += m) {
 			for (; yr > y; yr--)
 				printf("\n|");
-			plot(x++, y, ' ');
-		}
+			plot(x++, y, ' '); }
 		max = -b;
 	}
 
@@ -108,8 +115,6 @@ void graph_neg(int m, int b) {
 void graph_pos(int m, int b) {
 	int x;
 	int x_0; // x of point that is just above x-axis 
-	int end_x;
-	// printd(x_0);
 
 	x_0 = (-b / m);
 	/*
@@ -128,19 +133,22 @@ void graph_pos(int m, int b) {
 	}
 	end_x = -x; // we plot as much above as we do bellow
 	int y = m * x + b;
-	int yr = y; // real y level
-
+	printd(x_0);
 	for (int i = 0; i < -end_x; i++)
 		spaces[i] = ' ';
 	// printf("%s|\n", spaces);
 
+	int yr;
 	// plot above the x axis
 	for (; y > 0; y-=m) {
-		for (; yr > y; yr--)
-			printf("\n|");
+		for (; yr > y+1; yr--)
+			printf("%s|\n", spaces);
+		yr = y;
 		plot(x--, y, ' ');
 	}
 
+	// plot x axis
+/*
 	// plot x axis
 	for (; yr > 0; yr--)
 		printf("\n|");
@@ -158,10 +166,8 @@ void graph_pos(int m, int b) {
 	}
 
 	// plot bellow the x axis
-	/*
 	The x > 0 condition is just wrong.
 	Take m = 2, b = 8. x becomes < 0 before the first loop is even over
-	*/
 	for (; x > 0; x--) {
 		for (; yr > y; yr--)
 			printf("\n|");
@@ -169,6 +175,7 @@ void graph_pos(int m, int b) {
 		y -= m;
 	}
 	putchar('\n');
+*/
 }
 
 void graph_0(int b) {
