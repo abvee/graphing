@@ -133,15 +133,15 @@ void graph_neg(int m, int b) {
 }
 
 void graph_pos(int m, int b) {
+	// setting
 	int x;
-	if (b > 0)
-		x = b; 
-	else
-		x = -b;
+	if (b > 0) x = b; 
+	else x = -b;
+
 	end_x = -x; // end_x requires more calculations
+
 	int y = m * x + b;
 	int yr;
-
 	for (int i = 0; i < -end_x; i++)
 		spaces[i] = ' ';
 
@@ -158,8 +158,12 @@ void graph_pos(int m, int b) {
 	// plot x axis
 	for (; yr > 0; yr--)
 		printf("%s|\n", spaces);
-	draw_x(x--, y);
-	y -= m;
+	draw_x(x, y);
+	// effectively plotted a point
+	if (y == 0) {
+		y -= m;
+		x--;
+	}
 	putchar('\n');
 
 	// plot bellow the x axis
