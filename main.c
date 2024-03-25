@@ -9,7 +9,7 @@ void graph_neg(int m, int b);
 void graph_pos(int m, int b);
 void graph_0(int b);
 
-#define printd(x) printf("\033[1;31mDEBUG\033[0m: " #x " %d\n", (x))
+#define dprint(x) printf("\033[1;31mDEBUG\033[0m: " #x " %d\n", (x))
 
 
 // This only works for the first quadrant
@@ -57,7 +57,10 @@ int myatoi(char *s) {
 static char spaces[MAX] = {'\0'};
 int end_x;
 
-void plot(int x, int y, char c) {
+/*
+plot regular point that's not on x axis'
+*/
+void plot(int x, int y) {
 	int o = x;
 	if (x > 0)
 		printf("%s|", spaces);
@@ -66,8 +69,25 @@ void plot(int x, int y, char c) {
 		x = -end_x+x + 1;
 	}
 	for (int i = x - 1; i > 0; i--)
-		putchar(c);
-	printf(". (%d, %d)\n", o, y);
+		putchar(' ');
+	printf(". (%d, %d)", o, y);
+}
+
+/*
+Draw the x axis
+*/
+void draw_x(int x, int y) {
+	x = -end_x + x;
+	// dprint(x);
+	putchar('<');
+	if (y == 0) {
+		for (int i = 0; i < x-1; i++)
+			putchar('-');
+		printf(". (%d, %d)", x + end_x, y);
+	}
+	for (int i = end_x * 2; i < 0; i++)
+		putchar('-');
+	putchar('>');
 }
 
 // draw a graph with -ve slope
@@ -84,7 +104,7 @@ void graph_neg(int m, int b) {
 		for (; y > 0; y += m) {
 			for (; yr > y; yr--)
 				printf("\n|");
-			plot(x++, y, ' '); }
+			plot(x++, y); }
 		max = -b;
 	}
 
@@ -92,7 +112,7 @@ void graph_neg(int m, int b) {
 	for (;yr > 0; yr--)
 		printf("\n|");
 	if (y == 0) {
-		plot(x++, y, '-');
+		plot(x++, y);
 		y+=m;
 		printf("--->");
 	}
@@ -107,75 +127,49 @@ void graph_neg(int m, int b) {
 	for (; y > max; y+=m) {
 		for (; yr > y; yr--)
 			printf("\n|");
-		plot(x++, y, ' ');
+		plot(x++, y);
 	}
 	putchar('\n');
 }
 
 void graph_pos(int m, int b) {
 	int x;
-	int x_0; // x of point that is just above x-axis 
-
-	x_0 = (-b / m);
-	/*
-	m * (x_0) is always <= b
-	Thus, x_0 is the (x) coord just on or bellow the x axis if b < 0
-	x_0 is the (x) coord just on or above the x axis if b > 0
-	*/
-	if (b > 0) {
+	if (b > 0)
 		x = b; 
-		if (b % m == 0) // x_0 on the xaxis, move it one up
-			x_0 += 1;
-	}
-	else {
+	else
 		x = -b;
-		x_0 += 1;
-	}
-	end_x = -x; // we plot as much above as we do bellow
+	end_x = -x; // end_x requires more calculations
 	int y = m * x + b;
-	printd(x_0);
+	int yr;
+
 	for (int i = 0; i < -end_x; i++)
 		spaces[i] = ' ';
-	// printf("%s|\n", spaces);
 
-	int yr;
 	// plot above the x axis
 	for (; y > 0; y-=m) {
 		for (; yr > y+1; yr--)
 			printf("%s|\n", spaces);
 		yr = y;
-		plot(x--, y, ' ');
+		plot(x--, y);
+		putchar('\n');
 	}
+	yr--; // newline is printed at the end, our real y value is less
 
-	// plot x axis
-/*
 	// plot x axis
 	for (; yr > 0; yr--)
-		printf("\n|");
-
-	if (y == 0) {
-		plot(x--, y, '-');
-		y-=m;
-		printf("--->");
-	}
-	else {
-		int o = 2 * x;
-		while (o-- > 0)
-			putchar('-');
-		putchar('>');
-	}
+		printf("%s|\n", spaces);
+	draw_x(x--, y);
+	y -= m;
+	putchar('\n');
 
 	// plot bellow the x axis
-	The x > 0 condition is just wrong.
-	Take m = 2, b = 8. x becomes < 0 before the first loop is even over
-	for (; x > 0; x--) {
-		for (; yr > y; yr--)
-			printf("\n|");
-		plot(x, y, ' ');
-		y -= m;
+	for (; x >= end_x; y-=m) {
+		for (; yr > y+1; yr--)
+			printf("%s|\n", spaces);
+		yr = y;
+		plot(x--, y);
+		putchar('\n');
 	}
-	putchar('\n');
-*/
 }
 
 void graph_0(int b) {
