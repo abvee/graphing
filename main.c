@@ -79,7 +79,8 @@ Draw the x axis
 void draw_x(int x, int y) {
 	x = -end_x + x;
 	// dprint(x);
-	putchar('<');
+	if (x != 0) // edge case
+		putchar('<');
 	if (y == 0) {
 		for (int i = 0; i < x-1; i++)
 			putchar('-');
@@ -145,6 +146,9 @@ void graph_pos(int m, int b) {
 	for (int i = 0; i < -end_x; i++)
 		spaces[i] = ' ';
 
+	// top arrows
+	printf("%s^\n%s|\n", spaces, spaces);
+
 	// plot above the x axis
 	for (; y > 0; y-=m) {
 		for (; yr > y+1; yr--)
@@ -174,6 +178,7 @@ void graph_pos(int m, int b) {
 		plot(x--, y);
 		putchar('\n');
 	}
+	printf("%s|\n", spaces);
 }
 
 void graph_0(int b) {
