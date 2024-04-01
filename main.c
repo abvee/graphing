@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef enum {false, true} bool;
-enum {MAX = 101}; // MAx length of arbritary arrays
+enum {MAX = 101, LIMIT = 20}; // arbritrary constants
 
 int myatoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
@@ -55,10 +55,10 @@ int myatoi(char *s) {
 }
 
 static char spaces[MAX] = {'\0'};
-int end_x;
+int end_x; // x coord of left most point
 
 /*
-plot regular point that's not on x axis'
+plot regular point that's not on x axis
 */
 void plot(int x, int y) {
 	int o = x;
@@ -77,72 +77,96 @@ void plot(int x, int y) {
 Draw the x axis
 */
 void draw_x(int x, int y) {
-	x = -end_x + x;
-	// dprint(x);
+	x = -end_x + x; // transform x to offset from leftmost point
+
 	if (x != 0) // edge case
 		putchar('<');
+
 	if (y == 0) {
 		for (int i = 0; i < x-1; i++)
 			putchar('-');
 		printf(". (%d, %d)", x + end_x, y);
 	}
-	for (int i = end_x * 2; i < 0; i++)
+
+	for (int i = (end_x == 0)?-x:end_x * 2; i < 0; i++)
 		putchar('-');
 	putchar('>');
 }
 
 // draw a graph with -ve slope
 void graph_neg(int m, int b) {
-	int y = b; // y level of point
-	int x = 0; // x level
+	int x; // x level
+	int max_x; // max level we set x to
 
-	int yr = y; // real y level
-	int max = 2 * b; // Where do we plot till
-	printf("^\n|\n");
-
-	// Plot the +ve part
 	if (b > 0) {
-		for (; y > 0; y += m) {
-			for (; yr > y; yr--)
-				printf("\n|");
-			plot(x++, y); }
-		max = -b;
+		x = 0;
+		max_x = (-b / m) * 2;
 	}
+	else if (b == 0){
+		x = -LIMIT;
+		max_x = LIMIT;
+	}
+	else {
+		x = (-b/m) - (-b);
+		max_x = 2 * -b;
+	}
+
+	end_x = x; // what ?? How did I come up with this ?
+
+	int y = m * x + b; // y level of point
+	int yr = y; // real y level
+	for (int i = 0; i < -end_x; i++)
+		spaces[i] = ' ';
+	
+	// top arrows
+	printf("%s^\n%s|\n", spaces, spaces);
+
+	// Above x axis
+	for (; y > 0; y += m) {
+		for (; yr > y+1; yr--)
+			printf("%s|\n", spaces);
+		yr = y;
+		plot(x++, y);
+		putchar('\n');
+	}
+
+	yr--; // newline at the end of the loop makes our real y level 1 less
 
 	// Plot the X axis
-	for (;yr > 0; yr--)
-		printf("\n|");
+	for (; yr > 0; yr--)
+		printf("%s|\n", spaces);
+	draw_x(x, y);
 	if (y == 0) {
-		plot(x++, y);
+		x++;
 		y+=m;
-		printf("--->");
-	}
-	else if (yr > 0) { // checks if offset itself is not -ve
-		int o = 2 * x;
-		while (o-- > 0)
-			putchar('-');
-		putchar('>');
-	}
-
-	// plot bellow x axis
-	for (; y > max; y+=m) {
-		for (; yr > y; yr--)
-			printf("\n|");
-		plot(x++, y);
 	}
 	putchar('\n');
+
+	// plot bellow x axis
+	/*
+	(-b/m) is x when y == 0. Double that for x coord of last point.
+	you also end up with the same number of points below x axis as above
+	*/
+	for (; x <= max_x; y+=m) {
+		for (; yr > y+1; yr--)
+			printf("%s|\n", spaces);
+		yr = y;
+		plot(x++ ,y);
+		putchar('\n');
+	}
 }
 
 void graph_pos(int m, int b) {
 	// setting
 	int x;
 	if (b > 0) x = b; 
+	else if (b == 0) x = LIMIT;
 	else x = -b;
 
 	end_x = -x; // end_x requires more calculations
 
 	int y = m * x + b;
-	int yr;
+	int yr = y; // Ensures first loop condition fails
 	for (int i = 0; i < -end_x; i++)
 		spaces[i] = ' ';
 
@@ -157,7 +181,7 @@ void graph_pos(int m, int b) {
 		plot(x--, y);
 		putchar('\n');
 	}
-	yr--; // newline is printed at the end, our real y value is less
+	yr--; // newline is printed at the end, our real y value should be 1 less
 
 	// plot x axis
 	for (; yr > 0; yr--)
