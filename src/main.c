@@ -88,8 +88,8 @@ void graph_neg(int m, int b) {
 	int max_x; // max level we set x to
 
 	if (b > 0) {
-		x = 0;
 		max_x = (-b / m) * 2;
+		x = -(max_x / 2);
 	}
 	else if (b == 0){
 		x = -LIMIT;
