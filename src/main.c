@@ -150,7 +150,7 @@ void graph_pos(int m, int b) {
 	int x;
 	if (b > 0) x = b; 
 	else if (b == 0) x = LIMIT;
-	else x = -b;
+	else x = -b * 2 + MIN;
 
 	end_x = -x; // end_x requires more calculations
 
