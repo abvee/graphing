@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-enum {MAX = 101, LIMIT = 20}; // arbritrary constants
+enum {MAX = 101, LIMIT = 20, MIN = 4}; // arbritrary constants
 
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
@@ -88,8 +88,8 @@ void graph_neg(int m, int b) {
 	int max_x; // max level we set x to
 
 	if (b > 0) {
-		max_x = (-b / m) * 2;
-		x = -(max_x / 2);
+		max_x = (-b / m) * 2 + MIN;
+		x = -max_x / 2;
 	}
 	else if (b == 0){
 		x = -LIMIT;
