@@ -53,13 +53,12 @@ void plot(int x, int y) {
 		putchar(' ');
 	int t = printf(". (%d, %d)", o, y) - 1; // -1 for '\0'
 
-	if (o > 0) // the next part is only if the point is behine the y axis
-		return;
-
-	for (; x + t < -end_x ; t++)
-		putchar(' ');
-	if (x + t == -end_x)
+	// the next part is only if the point is behine the y axis
+	if (o < 0 && x + t <= -end_x) {
+		for (; x + t < -end_x ; t++)
+			putchar(' ');
 		putchar('|');
+	}
 }
 
 /*
