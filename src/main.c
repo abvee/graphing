@@ -1,16 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum {false, true} bool;
 enum {MAX = 101, LIMIT = 20}; // arbritrary constants
 
-int myatoi(char *string_to_convert); // String to integer
 void graph_neg(int m, int b);
 void graph_pos(int m, int b);
 void graph_0(int b);
 
 #define dprint(x) printf("\033[1;31mDEBUG\033[0m: " #x " %d\n", (x))
-
 
 // This only works for the first quadrant
 int main(int argc, char *argv[]) {
@@ -20,8 +17,8 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-	int m = myatoi(argv[1]); // slope
-	int b = myatoi(argv[2]); // offset
+	int m = atoi(argv[1]); // slope
+	int b = atoi(argv[2]); // offset
 	if (m > 100 || m < -100 || b > 100 || b < -100) {
 		printf("Put in a smaller slope or offset. keep it to 100, what you're gonna scroll forever ??\n");
 		return 1;
@@ -35,23 +32,6 @@ int main(int argc, char *argv[]) {
 		graph_pos(m, b);
 
 	return 0;
-}
-
-// change text to number
-int myatoi(char *s) {
-	while (*s == ' ' || *s == '+')
-		s++;
-
-	int neg = 1;
-	if (*s == '-') {
-		neg = -1;
-		s++;
-	}
-
-	int x = 0;
-	for (;*s >= '0' && *s <= '9'; s++)
-		x = x * 10 + *s - '0';
-	return neg * x;
 }
 
 static char spaces[MAX] = {'\0'};
