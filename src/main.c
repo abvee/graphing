@@ -131,10 +131,6 @@ void graph_neg(int m, int b) {
 	putchar('\n');
 
 	// plot bellow x axis
-	/*
-	(-b/m) is x when y == 0. Double that for x coord of last point.
-	you also end up with the same number of points below x axis as above
-	*/
 	for (; x <= max_x; y+=m) {
 		for (; yr > y+1; yr--)
 			printf("%s|\n", spaces);
@@ -146,7 +142,7 @@ void graph_neg(int m, int b) {
 
 void graph_pos(int m, int b) {
 	// setting
-	int x;
+	int x; // unlike graph_neg, here x takes the role of max_x
 	if (b > 0) x = b; 
 	else if (b == 0) x = LIMIT;
 	else x = -b * 2 + MIN;
